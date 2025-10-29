@@ -96,8 +96,8 @@ public class Game1 extends AppCompatActivity {
                     finish();
                 });
 
-                builder.setNegativeButton("Выйти в главное меню", (dialog, which) -> {
-                    Intent intent = new Intent(Game1.this, MainActivity.class);
+                builder.setNegativeButton("Выйти в меню выбора сложности", (dialog, which) -> {
+                    Intent intent = new Intent(Game1.this, Difficulty.class);
                     startActivity(intent);
                     finish();
                 });
@@ -160,6 +160,7 @@ public class Game1 extends AppCompatActivity {
 
     public void win()
     {
+        timer.cancel();
         mediaPlayer.stop();
         mediaSound = MediaPlayer.create(Game1.this, R.raw.ura_win);
         mediaSound.setVolume(0.1f, 0.1f);
@@ -175,8 +176,8 @@ public class Game1 extends AppCompatActivity {
             finish();
         });
 
-        builder.setNegativeButton("Выйти в главное меню", (dialog, which) -> {
-            Intent intent = new Intent(Game1.this, MainActivity.class);
+        builder.setNegativeButton("Выйти в меню выбора сложности", (dialog, which) -> {
+            Intent intent = new Intent(Game1.this, Difficulty.class);
             startActivity(intent);
             finish();
         });
@@ -195,5 +196,13 @@ public class Game1 extends AppCompatActivity {
 
     public void tarelka(View view) {
         check_index("Тарелка");
+    }
+
+    public void back(View view) {
+        timer.cancel();
+        mediaPlayer.stop();
+        Intent intent = new Intent(Game1.this, Difficulty.class);
+        startActivity(intent);
+        finish();
     }
 }

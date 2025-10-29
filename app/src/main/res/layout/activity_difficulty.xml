@@ -5,30 +5,42 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/main">
+    tools:context=".Difficulty"
+    android:background="@drawable/d">
 
     <TextView
         android:id="@+id/text1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="Поиск предметов"
+        android:text="Выберите сложность"
         android:layout_marginTop="30dp"
-        android:textSize="20pt"
+        android:textSize="17pt"
         android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
 
+    <ImageButton
+        android:onClick="back"
+        android:src="@drawable/baseline_chevron_left_24"
+        app:tint="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/back"
+        android:layout_width="26dp"
+        android:layout_height="24dp"
+        android:background="@color/transparent"
+        android:soundEffectsEnabled="false"/>
+
     <Button
-        android:id="@+id/game"
+        android:id="@+id/instruction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="start"
-        android:text="📱Играть📱"
+        android:onClick="instruction"
+        android:text="🤓Обучение🤓"
         android:textSize="12pt"
-        android:textColor="@color/dark_green"
+        android:textColor="@color/black"
         android:layout_marginTop="260dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -37,30 +49,45 @@
         android:soundEffectsEnabled="false"/>
 
     <Button
-        android:id="@+id/settings"
+        android:id="@+id/ease"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="settings"
-        android:text="⚙️Настройки⚙️"
-        android:textColor="@color/purple"
+        android:onClick="ease"
+        android:text="😼Легкий😼"
+        android:textSize="12pt"
+        android:textColor="@color/dark_green"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/instruction"
+        android:background="@color/transparent"
+        android:soundEffectsEnabled="false"/>
+
+    <Button
+        android:id="@+id/normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="normal"
+        android:text="😃Средний😃"
+        android:textColor="@color/blue"
         android:textSize="12pt"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/game"
+        app:layout_constraintTop_toBottomOf="@id/ease"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:background="@color/transparent"
         android:soundEffectsEnabled="false"/>
 
     <Button
-        android:id="@+id/exit"
+        android:id="@+id/hard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="exit"
-        android:text="🚪Выход🚪"
+        android:onClick="hard"
+        android:text="💀Тяжёлый💀"
         android:textColor="@color/red"
         android:textSize="12pt"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/settings"
+        app:layout_constraintTop_toBottomOf="@id/normal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:background="@color/transparent"
