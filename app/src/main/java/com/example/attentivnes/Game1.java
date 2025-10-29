@@ -31,6 +31,7 @@ public class Game1 extends AppCompatActivity {
     TextView text22;
     TextView countdown;
     MediaPlayer mediaPlayer;
+    MediaPlayer mediaSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,11 @@ public class Game1 extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                mediaPlayer.stop();
+                mediaSound = MediaPlayer.create(Game1.this, R.raw.fail);
+                mediaSound.setVolume(0.8f, 0.8f);
+                mediaSound.setLooping(false);
+                mediaSound.start();
                 AlertDialog.Builder builder = new AlertDialog.Builder(Game1.this);
                 builder.setTitle("Время вышло!");
                 builder.setMessage("Выберите действие:");
@@ -123,6 +129,10 @@ public class Game1 extends AppCompatActivity {
         {
             players.remove(name);
             Add_to_list(1);
+            mediaSound = MediaPlayer.create(Game1.this, R.raw.zvuk_pravilnogo_otveta_5fsd5);
+            mediaSound.setVolume(0.8f, 0.8f);
+            mediaSound.setLooping(false);
+            mediaSound.start();
             if (players.size() == 0)
             {
                 text11.setText("");
@@ -150,6 +160,11 @@ public class Game1 extends AppCompatActivity {
 
     public void win()
     {
+        mediaPlayer.stop();
+        mediaSound = MediaPlayer.create(Game1.this, R.raw.ura_win);
+        mediaSound.setVolume(0.1f, 0.1f);
+        mediaSound.setLooping(false);
+        mediaSound.start();
         AlertDialog.Builder builder = new AlertDialog.Builder(Game1.this);
         builder.setTitle("Вы выиграли!");
         builder.setMessage("Выберите действие:");

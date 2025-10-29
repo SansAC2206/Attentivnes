@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         });
         startBtn = findViewById(R.id.game);
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.sahur);
+        mediaPlayer = MediaPlayer.create(this, R.raw.bad_piggies_theme);
         mediaPlayer.setLooping(true);
         mediaPlayer.setVolume(0.8f, 0.8f);
         mediaPlayer.start();

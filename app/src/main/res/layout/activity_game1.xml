@@ -47,7 +47,8 @@
         android:layout_marginBottom="60dp"
         android:layout_width="141dp"
         android:layout_height="142dp"
-        android:background="@color/transparent"/>
+        android:background="@color/transparent"
+        android:soundEffectsEnabled="false"/>
 
     <Button
         app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +61,8 @@
         android:id="@+id/button3"
         android:layout_width="29dp"
         android:layout_height="40dp"
-        android:background="@color/transparent"/>
+        android:background="@color/transparent"
+        android:soundEffectsEnabled="false"/>
 
     <Button
         android:id="@+id/button4"
@@ -71,7 +73,8 @@
         android:layout_marginLeft="325dp"
         android:layout_width="33dp"
         android:layout_height="36dp"
-        android:background="@color/transparent"/>
+        android:background="@color/transparent"
+        android:soundEffectsEnabled="false"/>
 
     <Button
         android:onClick="tarelka"
@@ -82,7 +85,8 @@
         android:id="@+id/button5"
         android:layout_width="26dp"
         android:layout_height="24dp"
-        android:background="@color/transparent"/>
+        android:background="@color/transparent"
+        android:soundEffectsEnabled="false"/>
 
     <TextView
         android:id="@+id/TextTime"
