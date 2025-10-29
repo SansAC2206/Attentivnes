@@ -15,7 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     Button startBtn;
-    MediaPlayer mediaPlayer;
+    static MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start(View view) {
-        Intent intent = new Intent(this, Difficulty.class);
+        Intent intent = new Intent(this, Difficulty.class).putExtra("Music", mediaPlayer.getTrackInfo());
         startActivity(intent);
         finish();
     }

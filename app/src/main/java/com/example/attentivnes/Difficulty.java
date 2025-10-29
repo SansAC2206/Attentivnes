@@ -1,6 +1,7 @@
 package com.example.attentivnes;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Difficulty extends AppCompatActivity {
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,17 @@ public class Difficulty extends AppCompatActivity {
     }
 
     public void ease(View view) {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+
+        if (MainActivity.mediaPlayer != null && MainActivity.mediaPlayer.isPlaying()) {
+            MainActivity.mediaPlayer.stop();
+            MainActivity.mediaPlayer.release();
+            MainActivity.mediaPlayer = null;
+        }
+
         Intent intent = new Intent(this, Game1.class);
         startActivity(intent);
         finish();
@@ -40,8 +53,21 @@ public class Difficulty extends AppCompatActivity {
     }
 
     public void back(View view) {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
     }
 }
