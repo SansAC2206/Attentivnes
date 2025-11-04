@@ -75,14 +75,13 @@ public class Difficulty extends AppCompatActivity {
 
 //    @Override
 //    protected void onStop() {
-//        mediaPlayer.stop();
+//        mediaPlayer.pause();
 //        super.onStop();
 //    }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        mediaPlayer = MediaPlayer.create(this, R.raw.bad_piggies_theme);
         mediaPlayer.start();
     }
 }

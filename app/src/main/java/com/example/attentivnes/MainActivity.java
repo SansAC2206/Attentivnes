@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     public void start(View view) {
         Intent intent = new Intent(this, Difficulty.class);
         startActivity(intent);
-        finish();
     }
 
     public void exit(View view) {
@@ -62,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        mediaPlayer.pause();
+//    }
 }

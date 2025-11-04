@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Game1">
 
-    <!-- Контейнер для зума и панорамирования -->
+
     <FrameLayout
         android:id="@+id/zoomContainer"
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         android:clipChildren="false"
         android:clipToPadding="false">
 
-        <!-- Кнопки предметов с абсолютным позиционированием -->
+
         <Button
             android:id="@+id/button2"
             android:onClick="podushka"
@@ -33,8 +33,8 @@
             android:layout_width="29dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="230dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="220dp"
+            android:layout_marginEnd="18dp"
             android:background="@color/transparent"
             android:soundEffectsEnabled="false" />
 
@@ -45,7 +45,7 @@
             android:layout_height="36dp"
             android:layout_gravity="top|end"
             android:layout_marginTop="300dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="50dp"
             android:background="@color/transparent"
             android:soundEffectsEnabled="false" />
 
@@ -62,20 +62,18 @@
 
     </FrameLayout>
 
-    <!-- Статичный UI поверх всего -->
+
     <LinearLayout
         android:id="@+id/staticUI"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Верхняя панель -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp">
 
-            <!-- Кнопка назад - слева -->
             <ImageButton
                 android:id="@+id/back"
                 android:onClick="back"
@@ -88,7 +86,6 @@
                 android:soundEffectsEnabled="false"
                 app:tint="@color/white" />
 
-            <!-- Таймер - по центру -->
             <TextView
                 android:id="@+id/TextTime"
                 android:layout_width="wrap_content"
@@ -100,7 +97,6 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <!-- Кнопка ресета зума - справа -->
             <ImageButton
                 android:id="@+id/resetZoom"
                 android:onClick="resetZoom"
@@ -120,7 +116,6 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <!-- Нижняя панель с предметами -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -115,6 +115,8 @@ public class Game1 extends AppCompatActivity {
                 });
 
                 AlertDialog dialog = builder.create();
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
             }
         }.start();
@@ -145,7 +147,6 @@ public class Game1 extends AppCompatActivity {
                             float newPosX = event.getX() - startX;
                             float newPosY = event.getY() - startY;
 
-                            // Ограничение перемещения
                             newPosX = Math.max(minPosX, Math.min(maxPosX, newPosX));
                             newPosY = Math.max(minPosY, Math.min(maxPosY, newPosY));
 
@@ -174,13 +175,11 @@ public class Game1 extends AppCompatActivity {
         float containerWidth = zoomContainer.getWidth();
         float containerHeight = zoomContainer.getHeight();
 
-        // Максимальное смещение = (размер контейнера * (scale - 1)) / 2
         maxPosX = (containerWidth * (scaleFactor - 1)) / 2;
         maxPosY = (containerHeight * (scaleFactor - 1)) / 2;
         minPosX = -maxPosX;
         minPosY = -maxPosY;
 
-        // Применяем текущие ограничения
         posX = Math.max(minPosX, Math.min(maxPosX, posX));
         posY = Math.max(minPosY, Math.min(maxPosY, posY));
         applyZoomAndPan();
@@ -193,7 +192,6 @@ public class Game1 extends AppCompatActivity {
             scaleFactor *= detector.getScaleFactor();
             scaleFactor = Math.max(1.0f, Math.min(scaleFactor, 3.0f));
 
-            // Плавное изменение позиции при зуме
             float scaleChange = scaleFactor / previousScale;
             posX *= scaleChange;
             posY *= scaleChange;
@@ -225,7 +223,6 @@ public class Game1 extends AppCompatActivity {
         posX = 0f;
         posY = 0f;
         applyZoomAndPan();
-        // Обновляем границы после сброса
         zoomContainer.post(new Runnable() {
             @Override
             public void run() {
@@ -300,6 +297,8 @@ public class Game1 extends AppCompatActivity {
         });
 
         AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 
