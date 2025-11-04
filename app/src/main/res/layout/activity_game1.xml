@@ -1,116 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/game1"
     tools:context=".Game1">
 
-    <TextView
-        android:id="@+id/text1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text="asdasd"
-        android:textSize="10pt"
-        android:textColor="@color/white"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="180dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+    <!-- Контейнер для зума и панорамирования -->
+    <FrameLayout
+        android:id="@+id/zoomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/game1"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
-    <TextView
-        android:id="@+id/text2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/text1"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text="asdasd"
-        android:textSize="10pt"
-        android:textColor="@color/white"
-        android:layout_marginLeft="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        <!-- Кнопки предметов с абсолютным позиционированием -->
+        <Button
+            android:id="@+id/button2"
+            android:onClick="podushka"
+            android:layout_width="141dp"
+            android:layout_height="142dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="60dp"
+            android:background="@color/transparent"
+            android:soundEffectsEnabled="false" />
 
-    <Button
-        android:id="@+id/button2"
-        android:onClick="podushka"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="60dp"
-        android:layout_width="141dp"
-        android:layout_height="142dp"
-        android:background="@color/transparent"
-        android:soundEffectsEnabled="false"/>
+        <Button
+            android:id="@+id/button3"
+            android:onClick="gorshok"
+            android:layout_width="29dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="230dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/transparent"
+            android:soundEffectsEnabled="false" />
 
-    <Button
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:onClick="gorshok"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="430dp"
-        android:id="@+id/button3"
-        android:layout_width="29dp"
-        android:layout_height="40dp"
-        android:background="@color/transparent"
-        android:soundEffectsEnabled="false"/>
+        <Button
+            android:id="@+id/button4"
+            android:onClick="lampa"
+            android:layout_width="33dp"
+            android:layout_height="36dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="300dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/transparent"
+            android:soundEffectsEnabled="false" />
 
-    <Button
-        android:id="@+id/button4"
-        android:onClick="lampa"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="300dp"
-        android:layout_marginLeft="325dp"
-        android:layout_width="33dp"
-        android:layout_height="36dp"
-        android:background="@color/transparent"
-        android:soundEffectsEnabled="false"/>
+        <Button
+            android:id="@+id/button5"
+            android:onClick="tarelka"
+            android:layout_width="26dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|start"
+            android:layout_marginTop="360dp"
+            android:layout_marginStart="40dp"
+            android:background="@color/transparent"
+            android:soundEffectsEnabled="false" />
 
-    <Button
-        android:onClick="tarelka"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="360dp"
-        android:layout_marginLeft="40dp"
-        android:id="@+id/button5"
-        android:layout_width="26dp"
-        android:layout_height="24dp"
-        android:background="@color/transparent"
-        android:soundEffectsEnabled="false"/>
+    </FrameLayout>
 
-    <ImageButton
-        android:onClick="back"
-        android:src="@drawable/baseline_chevron_left_24"
-        app:tint="@color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:id="@+id/back"
-        android:layout_width="26dp"
-        android:layout_height="24dp"
-        android:background="@color/transparent"
-        android:soundEffectsEnabled="false"/>
+    <!-- Статичный UI поверх всего -->
+    <LinearLayout
+        android:id="@+id/staticUI"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/TextTime"
-        android:text="hgjhhhhhghc"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textSize="8pt"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"/>
+        <!-- Верхняя панель -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Кнопка назад - слева -->
+            <ImageButton
+                android:id="@+id/back"
+                android:onClick="back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@color/transparent"
+                android:src="@drawable/baseline_chevron_left_24"
+                android:soundEffectsEnabled="false"
+                app:tint="@color/white" />
+
+            <!-- Таймер - по центру -->
+            <TextView
+                android:id="@+id/TextTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Времени осталось: 3:00"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Кнопка ресета зума - справа -->
+            <ImageButton
+                android:id="@+id/resetZoom"
+                android:onClick="resetZoom"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@color/transparent"
+                android:src="@drawable/twotone_360_24"
+                android:soundEffectsEnabled="false"
+                app:tint="@color/white" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Нижняя панель с предметами -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Предмет 1"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Предмет 2"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

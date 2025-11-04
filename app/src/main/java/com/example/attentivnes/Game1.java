@@ -6,10 +6,11 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -22,7 +23,6 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
 
 public class Game1 extends AppCompatActivity {
     CountDownTimer timer;
@@ -33,6 +33,13 @@ public class Game1 extends AppCompatActivity {
     TextView text22;
     TextView countdown;
     MediaPlayer mediaSound;
+
+    private ScaleGestureDetector scaleGestureDetector;
+    private float scaleFactor = 1.0f;
+    private FrameLayout zoomContainer;
+    private View staticUI;
+    private float posX = 0f, posY = 0f;
+    private float maxPosX, maxPosY, minPosX, minPosY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +52,11 @@ public class Game1 extends AppCompatActivity {
             return insets;
         });
 
-        items_of_items= new ArrayList<>();
+        zoomContainer = findViewById(R.id.zoomContainer);
+        staticUI = findViewById(R.id.staticUI);
+        scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
+
+        items_of_items = new ArrayList<>();
         items_of_items.add("Лампа");
         items_of_items.add("Горшок");
         items_of_items.add("Подушка");
@@ -70,12 +81,9 @@ public class Game1 extends AppCompatActivity {
         timer = new CountDownTimer(180000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if (millisUntilFinished / 1000 % 60 >= 10)
-                {
+                if (millisUntilFinished / 1000 % 60 >= 10) {
                     countdown.setText("Времени осталось: " + millisUntilFinished / 1000 / 60 + ":" + millisUntilFinished / 1000 % 60);
-                }
-                else
-                {
+                } else {
                     countdown.setText("Времени осталось: " + millisUntilFinished / 1000 / 60 + ":0" + millisUntilFinished / 1000 % 60);
                 }
             }
@@ -83,6 +91,9 @@ public class Game1 extends AppCompatActivity {
             @Override
             public void onFinish() {
                 mediaPlayer.stop();
+                if (MainActivity.mediaPlayer != null && !MainActivity.mediaPlayer.isPlaying()) {
+                    MainActivity.mediaPlayer.start();
+                }
                 mediaSound = MediaPlayer.create(Game1.this, R.raw.fail);
                 mediaSound.setVolume(0.8f, 0.8f);
                 mediaSound.setLooping(false);
@@ -106,63 +117,168 @@ public class Game1 extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
-
         }.start();
+
+        zoomContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                calculateBounds();
+            }
+        });
+
+        zoomContainer.setOnTouchListener(new View.OnTouchListener() {
+            private float startX, startY;
+            private boolean isScaling = false;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                scaleGestureDetector.onTouchEvent(event);
+
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = event.getX() - posX;
+                        startY = event.getY() - posY;
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        if (!scaleGestureDetector.isInProgress() && !isScaling) {
+                            float newPosX = event.getX() - startX;
+                            float newPosY = event.getY() - startY;
+
+                            // Ограничение перемещения
+                            newPosX = Math.max(minPosX, Math.min(maxPosX, newPosX));
+                            newPosY = Math.max(minPosY, Math.min(maxPosY, newPosY));
+
+                            posX = newPosX;
+                            posY = newPosY;
+
+                            applyZoomAndPan();
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        isScaling = true;
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_POINTER_UP:
+                        isScaling = false;
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    private void calculateBounds() {
+        float containerWidth = zoomContainer.getWidth();
+        float containerHeight = zoomContainer.getHeight();
+
+        // Максимальное смещение = (размер контейнера * (scale - 1)) / 2
+        maxPosX = (containerWidth * (scaleFactor - 1)) / 2;
+        maxPosY = (containerHeight * (scaleFactor - 1)) / 2;
+        minPosX = -maxPosX;
+        minPosY = -maxPosY;
+
+        // Применяем текущие ограничения
+        posX = Math.max(minPosX, Math.min(maxPosX, posX));
+        posY = Math.max(minPosY, Math.min(maxPosY, posY));
+        applyZoomAndPan();
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float previousScale = scaleFactor;
+            scaleFactor *= detector.getScaleFactor();
+            scaleFactor = Math.max(1.0f, Math.min(scaleFactor, 3.0f));
+
+            // Плавное изменение позиции при зуме
+            float scaleChange = scaleFactor / previousScale;
+            posX *= scaleChange;
+            posY *= scaleChange;
+
+            calculateBounds();
+            return true;
+        }
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+            return true;
+        }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+            calculateBounds();
+        }
+    }
+
+    private void applyZoomAndPan() {
+        zoomContainer.setScaleX(scaleFactor);
+        zoomContainer.setScaleY(scaleFactor);
+        zoomContainer.setTranslationX(posX);
+        zoomContainer.setTranslationY(posY);
+    }
+
+    public void resetZoom(View view) {
+        scaleFactor = 1.0f;
+        posX = 0f;
+        posY = 0f;
+        applyZoomAndPan();
+        // Обновляем границы после сброса
+        zoomContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                calculateBounds();
+            }
+        });
     }
 
     public void Add_to_list(int count) {
-        for (int i=0; i < count; i++)
-        {
-            if (items_of_items.size() != 0)
-            {
+        for (int i = 0; i < count; i++) {
+            if (items_of_items.size() != 0) {
                 int x = random.nextInt(items_of_items.size());
                 players.add(items_of_items.get(x));
                 items_of_items.remove(x);
             }
         }
     }
+
     public void podushka(View view) {
         check_index("Подушка");
     }
 
     public void check_index(String name) {
-        if (players.contains(name))
-        {
+        if (players.contains(name)) {
             players.remove(name);
             Add_to_list(1);
             mediaSound = MediaPlayer.create(Game1.this, R.raw.zvuk_pravilnogo_otveta_5fsd5);
             mediaSound.setVolume(0.8f, 0.8f);
             mediaSound.setLooping(false);
             mediaSound.start();
-            if (players.size() == 0)
-            {
+            if (players.size() == 0) {
                 text11.setText("");
                 win();
-            }
-            else
-            {
+            } else {
                 text11.setText(players.get(0));
             }
-            if (players.size() <= 1)
-            {
+            if (players.size() <= 1) {
                 text22.setText("");
-            }
-            else
-            {
+            } else {
                 text22.setText(players.get(1));
             }
             Log.d("Чекнул", "sda");
-        }
-        else
-        {
+        } else {
             Log.d("Не чек", "asd");
         }
     }
 
-    public void win()
-    {
+    public void win() {
         timer.cancel();
         mediaPlayer.stop();
+        if (MainActivity.mediaPlayer != null && !MainActivity.mediaPlayer.isPlaying()) {
+            MainActivity.mediaPlayer.start();
+        }
         mediaSound = MediaPlayer.create(Game1.this, R.raw.ura_win);
         mediaSound.setVolume(0.1f, 0.1f);
         mediaSound.setLooping(false);
@@ -202,6 +318,9 @@ public class Game1 extends AppCompatActivity {
     public void back(View view) {
         timer.cancel();
         mediaPlayer.stop();
+        if (MainActivity.mediaPlayer != null && !MainActivity.mediaPlayer.isPlaying()) {
+            MainActivity.mediaPlayer.start();
+        }
         Intent intent = new Intent(Game1.this, Difficulty.class);
         startActivity(intent);
         finish();
