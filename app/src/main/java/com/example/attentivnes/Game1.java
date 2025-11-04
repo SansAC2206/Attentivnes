@@ -1,5 +1,7 @@
 package com.example.attentivnes;
 
+import static com.example.attentivnes.MainActivity.mediaPlayer;
+
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -30,7 +32,6 @@ public class Game1 extends AppCompatActivity {
     TextView text11;
     TextView text22;
     TextView countdown;
-    MediaPlayer mediaPlayer;
     MediaPlayer mediaSound;
 
     @Override
@@ -69,7 +70,7 @@ public class Game1 extends AppCompatActivity {
         timer = new CountDownTimer(180000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if (millisUntilFinished / 1000 % 60 > 10)
+                if (millisUntilFinished / 1000 % 60 >= 10)
                 {
                     countdown.setText("Времени осталось: " + millisUntilFinished / 1000 / 60 + ":" + millisUntilFinished / 1000 % 60);
                 }

@@ -30,13 +30,16 @@ public class MainActivity extends AppCompatActivity {
         startBtn = findViewById(R.id.game);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.bad_piggies_theme);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.setVolume(0.8f, 0.8f);
-        mediaPlayer.start();
+        if (mediaPlayer.isPlaying() == false)
+        {
+            mediaPlayer.setLooping(true);
+            mediaPlayer.setVolume(0.8f, 0.8f);
+            mediaPlayer.start();
+        }
     }
 
     public void start(View view) {
-        Intent intent = new Intent(this, Difficulty.class).putExtra("Music", mediaPlayer.getTrackInfo());
+        Intent intent = new Intent(this, Difficulty.class);
         startActivity(intent);
         finish();
     }
@@ -46,5 +49,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void settings(View view) {
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mediaPlayer.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }
