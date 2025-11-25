@@ -13,9 +13,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-
-    Button startBtn;
     static MediaPlayer mediaPlayer;
+    private static boolean isAppInForeground = true;
+    public static boolean isExiting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +27,16 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        startBtn = findViewById(R.id.game);
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.bad_piggies_theme);
-        if (mediaPlayer.isPlaying() == false)
-        {
+        isExiting = false;
+
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.bad_piggies_theme);
             mediaPlayer.setLooping(true);
             mediaPlayer.setVolume(0.8f, 0.8f);
+        }
+
+        if (!mediaPlayer.isPlaying() && isAppInForeground && !isExiting) {
             mediaPlayer.start();
         }
     }
@@ -44,6 +47,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void exit(View view) {
+        isExiting = true;
+
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        isAppInForeground = false;
+
+        finishAffinity();
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
@@ -51,19 +64,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        mediaPlayer.start();
+    protected void onResume() {
+        super.onResume();
+        isAppInForeground = true;
+        if (mediaPlayer != null && !mediaPlayer.isPlaying() && !isExiting) {
+            mediaPlayer.start();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!isChangingConfigurations() && mediaPlayer != null && mediaPlayer.isPlaying() && !isExiting) {
+            mediaPlayer.pause();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if ((isFinishing() || isExiting) && mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        mediaPlayer.pause();
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        exit(null);
+    }
 }

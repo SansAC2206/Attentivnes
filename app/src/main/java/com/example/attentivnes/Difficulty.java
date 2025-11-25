@@ -1,6 +1,7 @@
 package com.example.attentivnes;
 
 import static com.example.attentivnes.MainActivity.mediaPlayer;
+import static com.example.attentivnes.MainActivity.isExiting;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -26,12 +27,7 @@ public class Difficulty extends AppCompatActivity {
             return insets;
         });
 
-        mediaPlayer.start();
-        if (mediaPlayer.isPlaying() == false)
-        {
-            mediaPlayer = MediaPlayer.create(this, R.raw.bad_piggies_theme);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.setVolume(0.8f, 0.8f);
+        if (mediaPlayer != null && !mediaPlayer.isPlaying() && !isExiting) {
             mediaPlayer.start();
         }
     }
@@ -40,14 +36,9 @@ public class Difficulty extends AppCompatActivity {
     }
 
     public void ease(View view) {
-        if (mediaPlayer != null)
-        {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
-       Intent intent = new Intent(this, Game1.class);
-       startActivity(intent);
-       finish();
+        Intent intent = new Intent(this, Game1.class);
+        startActivity(intent);
+        finish();
     }
 
     public void normal(View view) {
@@ -57,31 +48,32 @@ public class Difficulty extends AppCompatActivity {
     }
 
     public void back(View view) {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        mediaPlayer.stop();
-//        mediaPlayer.release();
-//        super.onDestroy();
-//    }
-
-//    @Override
-//    protected void onStop() {
-//        mediaPlayer.pause();
-//        super.onStop();
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        mediaPlayer.start();
+    protected void onPause() {
+        super.onPause();
+        if (!isChangingConfigurations() && mediaPlayer != null && mediaPlayer.isPlaying() && !isExiting) {
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mediaPlayer != null && !mediaPlayer.isPlaying() && !isExiting) {
+            mediaPlayer.start();
+        }
     }
 }

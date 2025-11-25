@@ -23,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import static com.example.attentivnes.MainActivity.isExiting;
 
 public class Game1 extends AppCompatActivity {
     CountDownTimer timer;
@@ -33,6 +34,7 @@ public class Game1 extends AppCompatActivity {
     TextView text22;
     TextView countdown;
     MediaPlayer mediaSound;
+    MediaPlayer gameMusic;
 
     private ScaleGestureDetector scaleGestureDetector;
     private float scaleFactor = 1.0f;
@@ -62,10 +64,10 @@ public class Game1 extends AppCompatActivity {
         items_of_items.add("Подушка");
         items_of_items.add("Тарелка");
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.tainstvennaja_muzyka_majnkraft);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.setVolume(0.8f, 0.8f);
-        mediaPlayer.start();
+        gameMusic = MediaPlayer.create(this, R.raw.tainstvennaja_muzyka_majnkraft);
+        gameMusic.setLooping(true);
+        gameMusic.setVolume(0.8f, 0.8f);
+        gameMusic.start();
 
         players = new ArrayList<>();
         Add_to_list(2);
@@ -90,10 +92,7 @@ public class Game1 extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                mediaPlayer.stop();
-                if (MainActivity.mediaPlayer != null && !MainActivity.mediaPlayer.isPlaying()) {
-                    MainActivity.mediaPlayer.start();
-                }
+                gameMusic.stop();
                 mediaSound = MediaPlayer.create(Game1.this, R.raw.fail);
                 mediaSound.setVolume(0.8f, 0.8f);
                 mediaSound.setLooping(false);
@@ -272,10 +271,7 @@ public class Game1 extends AppCompatActivity {
 
     public void win() {
         timer.cancel();
-        mediaPlayer.stop();
-        if (MainActivity.mediaPlayer != null && !MainActivity.mediaPlayer.isPlaying()) {
-            MainActivity.mediaPlayer.start();
-        }
+        gameMusic.stop();
         mediaSound = MediaPlayer.create(Game1.this, R.raw.ura_win);
         mediaSound.setVolume(0.1f, 0.1f);
         mediaSound.setLooping(false);
@@ -316,12 +312,47 @@ public class Game1 extends AppCompatActivity {
 
     public void back(View view) {
         timer.cancel();
-        mediaPlayer.stop();
+        gameMusic.stop();
         if (MainActivity.mediaPlayer != null && !MainActivity.mediaPlayer.isPlaying()) {
             MainActivity.mediaPlayer.start();
         }
         Intent intent = new Intent(Game1.this, Difficulty.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (gameMusic != null && gameMusic.isPlaying() && !isExiting) {
+            gameMusic.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (gameMusic != null && !gameMusic.isPlaying() && !isExiting) {
+            gameMusic.start();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (gameMusic != null && !isExiting) {
+            gameMusic.stop();
+            gameMusic.release();
+            gameMusic = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        back(null);
     }
 }
